@@ -1,12 +1,5 @@
-#include <math.h>
-
 int main(void) {
-  double a = 1, b = 3, c = -100500;
-  float d = sqrt(b * b - 4 * a * c);
-
-  float x1 = (-b + d) / 2 / a;
-  float x2 = (-b - d) / 2 / a;
-
-  return a * (x1 * x1) + b * x1 + c == 0,
-         a * (x2 * x2) + b * x2 + c == 0;
+  int x = 29029, y = 101101;
+  int gcd = 1001, lcm = 29 * 101 * 1001;
+  return x * y == gcd * lcm && x * y / gcd == lcm;
 }
