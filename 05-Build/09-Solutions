@@ -1,0 +1,45 @@
+# Linux
+
+$ clang -shared -o 09-TaskPing.so 09-TaskPing.c -Wl,-soname,09-TaskPing.so -fPIC
+$ clang -shared -o 09-TaskPong.so 09-TaskPong.c -Wl,-soname,09-TaskPong.so -fPIC
+$ clang -c -o 09-TaskMain.o 09-TaskMain.c
+$ clang -o 09-TaskMain 09-TaskMain.o 09-TaskPing.so 09-TaskPong.so
+$ ./09-TaskMain
+# NO 09-TaskPong.so
+$ LD_LIBRARY_PATH=. ./09-TaskMain
+
+# Macos
+
+$ cat 09-TaskPingBase.c
+#include "09-TaskPing.h"
+
+#include <assert.h>
+#include <stdio.h>
+
+void ping(int x) {
+    assert(0);
+}
+$ clang -shared -o 09-TaskPing.so 09-TaskPingBase.c -Wl,-install_name,09-TaskPing.so -fPIC
+$ clang -shared -o 09-TaskPong.so 09-TaskPong.c 09-TaskPing.so
+$ clang -c -o 09-TaskMain.o 09-TaskMain.c
+$ clang -o 09-TaskMain 09-TaskMain.o 09-TaskPing.so
+$ ./09-TaskMain
+# CRASH
+$ clang -shared -o 09-TaskPing.so 09-TaskPing.c -Wl,-install_name,09-TaskPing.so
+$ clang -o 09-TaskMain 09-TaskMain.o 09-TaskPing.so
+$ ./09-TaskMain
+
+# Win
+__declspec(dllexport) void ping
+__declspec(dllimport) void ping
+09-TaskPingBase.c
+
+> cl /LD 09-TaskPingBase.c                 # will generate 09-TaskPingBase.{lib, exp, dll}
+> cl /LD 09-TaskPong.c 09-TaskPingBase.lib
+> cl /LD 09-TaskPing.c 09-TaskPong.lib
+> cl /c 09-TaskMain.c                      # will generate 09-TaskMain.obj
+> link /OUT:09-TaskMain.exe 09-TaskMain.obj 09-TaskPing.lib 09-TaskPong.lib
+> .\09-TaskMain.exe
+# CRASH
+> cl /LD 09-TaskPong.c 09-TaskPing.lib
+> .\09-TaskMain.exe
