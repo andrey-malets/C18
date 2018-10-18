@@ -1,0 +1,29 @@
+# Linux and Macos
+
+    # Build an so
+    clang -shared -o 09-TaskPing.so 09-TaskPing.c -fPIC
+
+    # Pass parameters to linker in compiler options
+    -Wl,<param_name>,<param_value>
+
+    # Specify soname (install_name for Macos)
+    -Wl,soname,<soname>
+    -Wl,install_name,<install_name>
+
+    # Env variable with path to user dynamic libraries (Linux only)
+    LD_LIBRARY_PATH
+
+# Win
+
+    # Special syntax for exported and imported functions in dlls
+    __declspec(dllexport) void f
+    __declspec(dllimport) void g
+
+    # Generate dll, exp and lib files
+    cl /LD main.c
+
+    # Make .obj-file
+    cl /c main.c
+
+    # Linker
+    link /OUT:main.exe main.obj ololo.lib
