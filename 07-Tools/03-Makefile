@@ -7,8 +7,14 @@ GTEST=googletest/googletest
 INCLUDES=-I$(GTEST) -I$(GTEST)/include
 WARN_OPTS=-Wall -Werror -pedantic
 
-CFLAGS=$(WARN_OPTS) $(INCLUDES) -std=c11
-CXXFLAGS=$(WARN_OPTS) $(INCLUDES) -std=c++17
+
+CFLAGS=$(WARN_OPTS) $(INCLUDES) \
+        -std=c11 -g
+
+CXXFLAGS=$(WARN_OPTS) $(INCLUDES) \
+        -std=c++17 -g
+
+LDFLAGS=-lm -lpthread
 
 all: 02-Main 02-TestQuadraticEquation
 
@@ -26,7 +32,7 @@ all: 02-Main 02-TestQuadraticEquation
 		$(GTEST)/src/gtest-all.o \
 		$(GTEST)/src/gtest_main.o \
 		02-TestQuadraticEquation.o
-	$(CXX) -o $@ $^
+	$(CXX) $(LDFLAGS) -o $@ $^
 
 $(GTEST)/src/gtest-all.o: \
 	$(GTEST)/src/gtest-all.cc

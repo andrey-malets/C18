@@ -2,16 +2,18 @@ CC=~/bin/clang
 CXX=~/bin/clang++
 LD=~/bin/clang++
 
-INCLUDES=-Igoogletest -Igoogletest/include
+GTEST=googletest/googletest
+
+INCLUDES=-I$(GTEST) -I$(GTEST)/include
 WARN_OPTS=-Wall -Werror -pedantic
 
-SANITIZER=-fsanitize=address
+SANITIZER=-fsanitize=undefined
 
 CFLAGS=$(WARN_OPTS) $(INCLUDES) \
-        $(SANITIZER) -std=c11
+        $(SANITIZER) -std=c11 -g
 CXXFLAGS=$(WARN_OPTS) $(INCLUDES) \
-        $(SANITIZER) -std=c++17
-LDFLAGS=-fsanitize=address
+        $(SANITIZER) -std=c++17 -g
+LDFLAGS=$(SANITIZER) -lm -lpthread
 
 all: 02-Main 02-TestQuadraticEquation
 
@@ -26,17 +28,16 @@ all: 02-Main 02-TestQuadraticEquation
 
 02-TestQuadraticEquation: \
 		02-SolveQuadraticEquation.o \
-		googletest/src/gtest-all.o \
-		googletest/src/gtest_main.o \
+		$(GTEST)/src/gtest-all.o \
+		$(GTEST)/src/gtest_main.o \
 		02-TestQuadraticEquation.o
 	$(CXX) $(LDFLAGS) -o $@ $^
 
-googletest/src/gtest-all.o: \
-	googletest/src/gtest-all.cc
+$(GTEST)/src/gtest-all.o: \
+	$(GTEST)/src/gtest-all.cc
 
-googletest/src/gtest_main.o: \
-	googletest/src/gtest_main.cc
+$(GTEST)/src/gtest_main.o: \
+	$(GTEST)/src/gtest_main.cc
 
 02-TestQuadraticEquation.o: \
 	02-TestQuadraticEquation.cc
-
