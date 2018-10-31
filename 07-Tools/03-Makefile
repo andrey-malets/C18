@@ -1,0 +1,38 @@
+CC=~/bin/clang
+CXX=~/bin/clang++
+LD=~/bin/clang++
+
+GTEST=googletest/googletest
+
+INCLUDES=-I$(GTEST) -I$(GTEST)/include
+WARN_OPTS=-Wall -Werror -pedantic
+
+CFLAGS=$(WARN_OPTS) $(INCLUDES) -std=c11
+CXXFLAGS=$(WARN_OPTS) $(INCLUDES) -std=c++17
+
+all: 02-Main 02-TestQuadraticEquation
+
+02-Main: \
+	02-Main.o \
+	02-SolveQuadraticEquation.o
+
+02-Main.o: 02-Main.c
+
+02-SolveQuadraticEquation.o: \
+	02-SolveQuadraticEquation.c
+
+02-TestQuadraticEquation: \
+		02-SolveQuadraticEquation.o \
+		$(GTEST)/src/gtest-all.o \
+		$(GTEST)/src/gtest_main.o \
+		02-TestQuadraticEquation.o
+	$(CXX) -o $@ $^
+
+$(GTEST)/src/gtest-all.o: \
+	$(GTEST)/src/gtest-all.cc
+
+$(GTEST)/src/gtest_main.o: \
+	$(GTEST)/src/gtest_main.cc
+
+02-TestQuadraticEquation.o: \
+	02-TestQuadraticEquation.cc

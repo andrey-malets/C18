@@ -1,0 +1,42 @@
+CC=~/bin/clang
+CXX=~/bin/clang++
+LD=~/bin/clang++
+
+INCLUDES=-Igoogletest -Igoogletest/include
+WARN_OPTS=-Wall -Werror -pedantic
+
+SANITIZER=-fsanitize=address
+
+CFLAGS=$(WARN_OPTS) $(INCLUDES) \
+        $(SANITIZER) -std=c11
+CXXFLAGS=$(WARN_OPTS) $(INCLUDES) \
+        $(SANITIZER) -std=c++17
+LDFLAGS=-fsanitize=address
+
+all: 02-Main 02-TestQuadraticEquation
+
+02-Main: \
+	02-Main.o \
+	02-SolveQuadraticEquation.o
+
+02-Main.o: 02-Main.c
+
+02-SolveQuadraticEquation.o: \
+	02-SolveQuadraticEquation.c
+
+02-TestQuadraticEquation: \
+		02-SolveQuadraticEquation.o \
+		googletest/src/gtest-all.o \
+		googletest/src/gtest_main.o \
+		02-TestQuadraticEquation.o
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+googletest/src/gtest-all.o: \
+	googletest/src/gtest-all.cc
+
+googletest/src/gtest_main.o: \
+	googletest/src/gtest_main.cc
+
+02-TestQuadraticEquation.o: \
+	02-TestQuadraticEquation.cc
+
