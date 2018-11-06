@@ -1,0 +1,52 @@
+CC=~/bin/clang
+CXX=~/bin/clang++
+LD=~/bin/clang++
+LLVM_PROFDATA=~/bin/llvm-profdata
+LLVM_COV=~/bin/llvm-cov
+
+COVERAGE_FORMAT=report
+
+GTEST=googletest/googletest
+
+INCLUDES=-I$(GTEST) -I$(GTEST)/include
+WARN_OPTS=-Wall -Werror -pedantic
+
+COVERAGE=-fprofile-instr-generate -fcoverage-mapping
+
+.PHONY: clean coverage
+
+clean:
+	find . -name '*.o' -delete
+
+
+CFLAGS=$(WARN_OPTS) $(INCLUDES) -std=c11 $(COVERAGE)
+
+CXXFLAGS=$(WARN_OPTS) $(INCLUDES) -std=c++17 $(COVERAGE)
+LDFLAGS=-lm -lpthread $(COVERAGE)
+
+all: 02-Main 02-TestQuadraticEquation
+
+02-Main: 02-Main.o 02-SolveQuadraticEquation.o
+	$(CC) $(LDFLAGS) -o $@ $^
+
+02-Main.o: 02-Main.c
+
+02-SolveQuadraticEquation.o: 02-SolveQuadraticEquation.c
+
+02-TestQuadraticEquation: \
+		02-SolveQuadraticEquation.o $(GTEST)/src/gtest-all.o \
+		$(GTEST)/src/gtest_main.o 02-TestQuadraticEquation.o
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+$(GTEST)/src/gtest-all.o: $(GTEST)/src/gtest-all.cc
+
+$(GTEST)/src/gtest_main.o: $(GTEST)/src/gtest_main.cc
+
+02-TestQuadraticEquation.o: 02-TestQuadraticEquation.cc
+
+coverage: 02-TestQuadraticEquation
+	LLVM_PROFILE_FILE=$^.profraw ./$^
+	$(LLVM_PROFDATA) merge -sparse $^.profraw -o $^.profdata
+	$(LLVM_COV) $(COVERAGE_FORMAT) \
+		--ignore-filename-regex=$(GTEST) \
+		-instr-profile=$^.profdata $^
