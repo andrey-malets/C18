@@ -1,4 +1,5 @@
 #include "vector_tail.h"
+
 #include <assert.h>
 #include <stdio.h>
 

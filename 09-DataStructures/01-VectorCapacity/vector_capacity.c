@@ -12,8 +12,10 @@ void free_vector(struct Vector *v) {
   v->size = 0;
   v->capacity = 0;
 
-  if (v->data)
+  if (v->data) {
     free(v->data);
+    v->data = NULL;
+  }
 }
 
 static bool realloc_vector(struct Vector* v, size_t new_size) {

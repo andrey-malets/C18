@@ -1,4 +1,5 @@
 #include "vector_capacity.h"
+
 #include <assert.h>
 #include <stdio.h>
 
