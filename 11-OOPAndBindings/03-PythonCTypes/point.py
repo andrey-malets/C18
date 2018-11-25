@@ -1,11 +1,12 @@
 import ctypes
+import os
 
 
 class Point(ctypes.Structure):
     _fields_ = [('x', ctypes.c_int), ('y', ctypes.c_int)]
 
 
-point_so = ctypes.CDLL('point.so')
+point_so = ctypes.CDLL(os.path.join(os.curdir, 'point.so'))
 
 p1, p2 = Point(), Point()
 
