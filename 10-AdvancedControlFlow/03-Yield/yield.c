@@ -25,7 +25,7 @@ struct yield_ctx *get_yield_ctx(int h, int l) {
 void yield_impl(struct yield_ctx *ctx, void *value) {
   ctx->value = value;
   swapcontext(&ctx->callee, &ctx->caller);
-  ctx->value = 0;
+  ctx->value = NULL;
 }
 
 struct yield_ctx *init_yield_ctx(void *buf, size_t buf_size,
@@ -34,7 +34,7 @@ struct yield_ctx *init_yield_ctx(void *buf, size_t buf_size,
   assert(buf_size > sizeof(struct yield_ctx));
 
   struct yield_ctx *rv = buf;
-  rv->value = 0;
+  rv->value = NULL;
 
   getcontext(&rv->callee);
   rv->callee.uc_link = &rv->caller;
@@ -52,7 +52,7 @@ void yield_swap(struct yield_ctx *ctx) {
 }
 
 int yield_more(struct yield_ctx *ctx) {
-  return ctx->value != 0;
+  return ctx->value != NULL;
 }
 
 void *get_yield_value(struct yield_ctx *ctx) {
