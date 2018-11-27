@@ -1,5 +1,6 @@
 #include <stddef.h>
 
+#include "figure_impl.h"
 #include "rectangle.h"
 #include "util.h"
 

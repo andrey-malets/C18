@@ -1,12 +1,6 @@
 #pragma once
 
-struct figure_ops;
+struct figure;
 
-struct figure {
-  const struct figure_ops *ops;
-};
-
-struct figure_ops {
-  double (*area)(const struct figure *);
-  void (*scale)(struct figure *, const double factor);
-};
+double figure_area(struct figure *f);
+void scale_figure(struct figure *f, const double factor);

@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "circle.h"
+#include "figure_impl.h"
 #include "util.h"
 
 struct circle {

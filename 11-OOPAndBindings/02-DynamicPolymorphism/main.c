@@ -18,14 +18,14 @@ double total_area(struct figure *const figures[],
                   size_t size) {
   double rv = 0.0;
   for (size_t i = 0; i != size; ++i)
-    rv += figures[i]->ops->area(figures[i]);
+    rv += figure_area(figures[i]);
   return rv;
 }
 
 void scale_all(struct figure *figures[], size_t size,
                double factor) {
   for (size_t i = 0; i != size; ++i)
-    figures[i]->ops->scale(figures[i], factor);
+    scale_figure(figures[i], factor);
 }
 
 int main(void) {
