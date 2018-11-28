@@ -1,3 +1,5 @@
+# cython: language_level=2
+
 cdef extern from "point.h":
     cdef struct point:
         int x;
