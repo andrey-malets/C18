@@ -4,18 +4,18 @@ import os
 import contextlib
 
 
-class Point(ctypes.Structure):
-    _fields_ = [('x', ctypes.c_int), ('y', ctypes.c_int)]
-
-    def __repr__(self):
-        return 'Point({}, {})'.format(self.x, self.y)
-
-
 point_so = ctypes.CDLL(os.path.join(os.curdir, 'point.so'))
 
 
 @contextlib.contextmanager
 def point(x, y):
+    class Point(ctypes.Structure):
+        _fields_ = [('x', ctypes.c_int), ('y', ctypes.c_int)]
+
+        def __repr__(self):
+            return 'Point({}, {})'.format(self.x, self.y)
+
+
     new_point = point_so.new_point
     new_point.restype = ctypes.POINTER(Point)
 
